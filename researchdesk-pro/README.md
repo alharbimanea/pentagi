@@ -42,7 +42,7 @@ Opening `/en/admin` then walks you through TOTP enrolment.
 
 ## AWS preview server
 
-`deploy/aws-preview/` holds a one-server preview for AWS `us-east-1`: a bootstrap script for EC2 (Supabase in Docker, production build in preview mode, Caddy on port 80) and its instructions. It is for previews with test data only.
+`deploy/aws-preview/` holds a one-server preview for AWS `us-east-2` (Ohio): a bootstrap script for EC2 (Supabase in Docker, production build in preview mode, Caddy on port 80) and its instructions. It is for previews with test data only.
 
 ## Tests
 

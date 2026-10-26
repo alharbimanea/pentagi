@@ -8,7 +8,7 @@ A throw-away preview of the whole app on one server: the Supabase stack in Docke
 
 | Resource | Setting |
 |---|---|
-| Region | `us-east-1` (owner decision: US hosting only) |
+| Region | `us-east-2` (Ohio; owner decision: US hosting only) |
 | EC2 | Ubuntu Server 24.04 LTS x86_64 AMI, `t3.medium` (4 GB; `bootstrap.sh` adds 4 GB swap), 30 GB gp3 root volume, public IP in the default VPC |
 | Security group | Inbound TCP 80 from the owner's IP `/32` only; no SSH (use Session Manager) |
 | IAM instance profile | `AmazonSSMManagedInstanceCore`, so the server can be managed with SSM Run Command / Session Manager without opening port 22 |
