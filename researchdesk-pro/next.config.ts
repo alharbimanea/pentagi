@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const supabase = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
 const supabaseWs = supabase.replace(/^http/, "ws");
+// On a plain-HTTP origin (the AWS preview) these two make the browser fetch
+// every asset over HTTPS, which nothing answers, so the page loads bare.
+const httpsOnly = (process.env.NEXT_PUBLIC_SITE_URL ?? "").startsWith("https://");
 
 // Next.js inlines bootstrap scripts, so script-src needs 'unsafe-inline'
 // unless every page is rendered with a nonce; frame-ancestors, form-action
@@ -18,7 +21,7 @@ const csp = [
   "form-action 'self'",
   "base-uri 'self'",
   "object-src 'none'",
-  "upgrade-insecure-requests",
+  ...(httpsOnly ? ["upgrade-insecure-requests"] : []),
 ].join("; ");
 
 const config: NextConfig = {
@@ -31,7 +34,7 @@ const config: NextConfig = {
         source: "/:path*",
         headers: [
           { key: "Content-Security-Policy", value: csp },
-          { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+          ...(httpsOnly ? [{ key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" }] : []),
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "X-Frame-Options", value: "DENY" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
