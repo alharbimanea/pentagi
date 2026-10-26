@@ -56,7 +56,7 @@ Nothing in this list can be completed by code. Each item blocks the feature name
 | 3 | Payment gateway merchant approval (Moyasar, HyperPay, Tap or PayTabs) with mada, Visa/Mastercard, Amex and Apple Pay enabled | Live payments | Gateway onboarding with CR and bank account for settlement |
 | 4 | PayPal merchant eligibility for the registered entity and country | PayPal | PayPal business onboarding |
 | 5 | Legal opinion on accepting cryptocurrency as a Saudi-based merchant, a licensed processor, AML/KYC, accounting and custody | Any crypto acceptance | Lawyer + accountant; crypto stays disabled until signed off |
-| 6 | PDPL review: privacy notice, lawful basis, cross-border transfer safeguards for each processor (Supabase region, Vercel, Resend, OpenAI), records of processing, breach procedure; registration with SDAIA's national data governance platform if applicable | Launch | Privacy counsel |
+| 6 | PDPL review: privacy notice, lawful basis, cross-border transfer safeguards for each processor (all hosting is in the USA by owner decision: Supabase/AWS `us-east-1`, Vercel or Amplify, Resend, OpenAI), records of processing, breach procedure; registration with SDAIA's national data governance platform if applicable | Launch | Privacy counsel |
 | 7 | Consumer-protection and e-commerce law review of terms, refund and cancellation policy | Launch | Lawyer |
 | 8 | Meta Business verification, WhatsApp Business Platform number and approved message templates | WhatsApp channel | Meta Business Manager |
 | 9 | Telegram bot creation (BotFather) and webhook | Telegram channel | Owner |

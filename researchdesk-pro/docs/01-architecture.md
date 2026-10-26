@@ -66,8 +66,8 @@ flowchart LR
 
 | Component | Recommended | Notes |
 |---|---|---|
-| Web app | Vercel Pro, region `fra1` or `bom1` (closest to KSA with Supabase) | Node.js runtime for webhooks (raw body, `node:crypto`) |
-| Database, Auth, Storage, Realtime | Supabase Pro, region chosen with PDPL counsel (e.g. `eu-central-1` or `ap-south-1`; a KSA region if one becomes available) | PITR add-on for backups |
+| Web app | Vercel Pro (`iad1`) or AWS Amplify (`us-east-1`) | All hosting is in the USA by owner decision; Node.js runtime for webhooks (raw body, `node:crypto`) |
+| Database, Auth, Storage, Realtime | Supabase Pro in `us-east-1`, or self-hosted Supabase on AWS EC2 in `us-east-1` | Keep the web app in the same region; PITR add-on for backups. Hosting personal data of Saudi residents in the USA is a cross-border transfer under PDPL — see approval item 6 |
 | Cron | Vercel Cron: `*/5 * * * *` → `/api/cron/notifications` | or an n8n schedule node |
 | Malware scanner | ClamAV REST container on a small VPS or Fly.io machine, reachable only from Vercel egress | |
 | n8n (optional) | Self-hosted behind Cloudflare Access, or n8n Cloud | Calls the app's cron endpoints; never holds the service-role key unless a workflow needs DB access |
