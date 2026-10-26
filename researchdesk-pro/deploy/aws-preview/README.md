@@ -9,13 +9,13 @@ A throw-away preview of the whole app on one server: the Supabase stack in Docke
 | Resource | Setting |
 |---|---|
 | Region | `us-east-2` (Ohio; owner decision: US hosting only) |
-| EC2 | Ubuntu Server 24.04 LTS x86_64 AMI, `t3.medium` (4 GB; `bootstrap.sh` adds 4 GB swap), 30 GB gp3 root volume, public IP in the default VPC |
+| EC2 | Ubuntu Server 24.04 LTS x86_64 AMI, `m7i-flex.large` (2 vCPU, 8 GB; `bootstrap.sh` adds 4 GB swap), 30 GB gp3 encrypted root volume, IMDSv2 required, public IP in the default VPC. An account on the AWS free plan refuses `t3.medium` and other types that are not free-tier eligible; `m7i-flex.large` is eligible, and any x86_64 type with at least 4 GB works on a paid plan |
 | Security group | Inbound TCP 80 from the owner's IP `/32` only; no SSH (use Session Manager) |
 | IAM instance profile | `AmazonSSMManagedInstanceCore`, so the server can be managed with SSM Run Command / Session Manager without opening port 22 |
 | User data | `bootstrap.sh` (installs Docker, Node 22, Caddy; clones this branch; starts Supabase; builds; creates systemd units) |
 | Tags | `Project=researchdesk-preview` on everything, so it can be found and deleted together |
 
-Cost at on-demand prices: roughly $30 per month for the instance and $2–3 for the volume while it exists; stopping the instance stops the instance charge.
+Cost at on-demand prices: roughly $70 per month for the instance and $2–3 for the volume while it exists; on the free plan both are drawn from the plan's credits. Stopping the instance stops the instance charge.
 
 ## After launch
 
