@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Navy / white / teal. Contrast pairs meet WCAG AA for body text. */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 220 60% 14%;
+  --card: 0 0% 100%;
+  --card-foreground: 220 60% 14%;
+  --primary: 220 62% 22%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 175 84% 26%;
+  --accent-foreground: 0 0% 100%;
+  --muted: 214 32% 95%;
+  --muted-foreground: 218 20% 36%;
+  --border: 214 25% 86%;
+  --input: 214 25% 80%;
+  --ring: 175 84% 30%;
+  --destructive: 0 72% 42%;
+  --destructive-foreground: 0 0% 100%;
+  --success: 152 62% 30%;
+  --warning: 32 92% 36%;
+}
+
+.dark {
+  --background: 222 50% 8%;
+  --foreground: 210 30% 94%;
+  --card: 222 45% 11%;
+  --card-foreground: 210 30% 94%;
+  --primary: 210 70% 76%;
+  --primary-foreground: 222 50% 10%;
+  --accent: 172 66% 50%;
+  --accent-foreground: 222 50% 8%;
+  --muted: 222 35% 16%;
+  --muted-foreground: 215 20% 72%;
+  --border: 222 30% 22%;
+  --input: 222 30% 28%;
+  --ring: 172 66% 50%;
+  --destructive: 0 70% 60%;
+  --destructive-foreground: 222 50% 8%;
+  --success: 152 55% 55%;
+  --warning: 38 92% 60%;
+}
+
+@layer base {
+  * { @apply border-border; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { @apply bg-background text-foreground antialiased; }
+  :focus-visible { @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background; }
+  [dir="rtl"] body { font-feature-settings: normal; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
