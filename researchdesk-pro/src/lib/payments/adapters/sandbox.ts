@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { publicEnv } from "@/lib/env";
 import { hmacSha256Hex, verifyHmacSha256 } from "@/lib/payments/hmac";
+import { isProductionStage } from "@/lib/stage";
 import { SignatureError, type GatewayEvent, type GatewayStatus, type PaymentAdapter } from "@/lib/payments/types";
 
 export const SANDBOX_SIGNATURE_HEADER = "x-sandbox-signature";
@@ -23,7 +24,7 @@ function secret(): string {
 
 // A fake gateway for development and acceptance tests. Its events are signed
 // with SANDBOX_WEBHOOK_SECRET and travel through the same verification and
-// ledger path as a real provider's. Refused outright in production.
+// ledger path as a real provider's. Refused outright when APP_STAGE is production.
 export const sandboxAdapter: PaymentAdapter = {
   id: "sandbox",
   methods: ["card", "mada", "apple_pay"],
@@ -31,7 +32,7 @@ export const sandboxAdapter: PaymentAdapter = {
   verified: true,
   isConfigured() {
     return (
-      process.env.NODE_ENV !== "production" &&
+      !isProductionStage() &&
       process.env.PAYMENTS_SANDBOX_ENABLED === "true" &&
       secret().length >= 24
     );

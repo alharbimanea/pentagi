@@ -1,0 +1,12 @@
+# One public port for everything: Supabase's API paths go to its gateway,
+# the rest to Next.js. Keeps the browser and the app on one origin.
+{$SITE_ADDRESS::80} {
+	encode gzip
+	@supabase path /auth/v1/* /rest/v1/* /storage/v1/* /realtime/v1/* /graphql/v1/*
+	handle @supabase {
+		reverse_proxy 127.0.0.1:54321
+	}
+	handle {
+		reverse_proxy 127.0.0.1:3000
+	}
+}

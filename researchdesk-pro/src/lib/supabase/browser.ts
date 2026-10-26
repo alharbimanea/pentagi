@@ -1,6 +1,6 @@
 import { createBrowserClient } from "@supabase/ssr";
-import { publicEnv } from "@/lib/env";
+import { authCookieName, publicEnv } from "@/lib/env";
 
 export function browserClient() {
-  return createBrowserClient(publicEnv.supabaseUrl, publicEnv.supabaseAnonKey);
+  return createBrowserClient(publicEnv.supabaseUrl, publicEnv.supabaseAnonKey, { cookieOptions: { name: authCookieName() } });
 }

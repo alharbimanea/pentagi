@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { publicEnv } from "@/lib/env";
 import { adminClient } from "@/lib/supabase/admin";
 import { serverClient } from "@/lib/supabase/server";
 
@@ -26,5 +27,8 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
 
   const { data: signed, error } = await adminClient().storage.from("order-files").createSignedUrl(file.path, 60, { download: file.original_name });
   if (error || !signed) return new NextResponse(null, { status: 500 });
-  return NextResponse.redirect(signed.signedUrl, { status: 303, headers: { "Cache-Control": "no-store" } });
+  // The service client may talk to Supabase on an internal address; the
+  // browser must be sent to the public one.
+  const url = signed.signedUrl.replace(publicEnv.supabaseServerUrl, publicEnv.supabaseUrl);
+  return NextResponse.redirect(url, { status: 303, headers: { "Cache-Control": "no-store" } });
 }

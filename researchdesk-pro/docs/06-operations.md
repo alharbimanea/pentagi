@@ -5,7 +5,7 @@
 The full list with comments is in `.env.example`. Rules:
 
 - Only `NEXT_PUBLIC_*` values reach the browser. `SUPABASE_SERVICE_ROLE_KEY`, gateway secrets, webhook secrets, `CRON_SECRET`, `IP_HASH_SALT` and API keys are server-only and live in the Vercel project's encrypted environment variables (separate values for Preview and Production).
-- `src/lib/env.ts` validates server variables at first use and refuses to start with `PAYMENTS_SANDBOX_ENABLED=true` in production.
+- `src/lib/env.ts` validates server variables at first use and refuses to start with `PAYMENTS_SANDBOX_ENABLED=true` when `APP_STAGE` is `production` (the default for a production build). Staging and preview servers set `APP_STAGE=preview`.
 - Generate secrets with `openssl rand -hex 32`. Rotate webhook and cron secrets when anyone who saw them leaves; rotate the service-role key from the Supabase dashboard if it is ever exposed.
 - Never paste production keys into AI tools, tickets or chat.
 
@@ -65,7 +65,7 @@ The full list with comments is in `.env.example`. Rules:
 
 1. Phase 0 approvals that gate launch are done (CR, gateway, policies reviewed by counsel).
 2. Production Supabase project created; Auth, MFA, templates configured; `npx supabase db push`; Supabase advisors clean.
-3. Vercel project: environment variables set; `PAYMENTS_SANDBOX_ENABLED` unset; domain and HTTPS; Vercel Cron → `/api/cron/notifications` every 5 minutes.
+3. Vercel project: environment variables set; `APP_STAGE=production`; `PAYMENTS_SANDBOX_ENABLED` unset; domain and HTTPS; Vercel Cron → `/api/cron/notifications` every 5 minutes.
 4. Gateway live keys set; adapter `verified` flipped only after the sandbox checklist passed; webhook URL registered; a 1 SAR live payment made and refunded, and both reconciled in the gateway dashboard.
 5. Resend domain verified; ClamAV reachable; Turnstile keys set.
 6. Owner bootstrap and MFA.

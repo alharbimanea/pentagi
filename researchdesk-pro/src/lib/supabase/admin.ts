@@ -9,7 +9,7 @@ let client: SupabaseClient | undefined;
 export function adminClient(): SupabaseClient {
   if (!client) {
     const env = serverEnv();
-    client = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+    client = createClient(env.SUPABASE_INTERNAL_URL ?? env.NEXT_PUBLIC_SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
       auth: { persistSession: false, autoRefreshToken: false },
     });
   }

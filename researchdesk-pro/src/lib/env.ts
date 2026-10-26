@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isProductionStage } from "@/lib/stage";
 
 const flag = z
   .enum(["true", "false"])
@@ -7,6 +8,8 @@ const flag = z
 
 const serverSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
+  APP_STAGE: z.enum(["development", "preview", "production"]).optional(),
+  SUPABASE_INTERNAL_URL: z.string().url().optional(),
   NEXT_PUBLIC_SITE_URL: z.string().url(),
   NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(20),
@@ -48,16 +51,30 @@ export function serverEnv(): ServerEnv {
       throw new Error(`Invalid or missing environment variables: ${fields}`);
     }
     cached = parsed.data;
-    if (cached.NODE_ENV === "production" && cached.PAYMENTS_SANDBOX_ENABLED) {
-      throw new Error("PAYMENTS_SANDBOX_ENABLED must be false in production");
+    if (isProductionStage() && cached.PAYMENTS_SANDBOX_ENABLED) {
+      throw new Error("PAYMENTS_SANDBOX_ENABLED must be false when APP_STAGE is production");
     }
   }
   return cached;
 }
 
+// @supabase/ssr names the session cookie after the Supabase host. The server
+// may reach Supabase on an internal URL, so both sides use the name derived
+// from the public one.
+export function authCookieName(): string {
+  try {
+    return `sb-${new URL(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").hostname.split(".")[0]}-auth-token`;
+  } catch {
+    return "sb-auth-token";
+  }
+}
+
 export const publicEnv = {
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+  // Server-side only: where this server reaches Supabase, when that differs
+  // from the browser-facing URL (e.g. behind a reverse proxy on the same host).
+  supabaseServerUrl: process.env.SUPABASE_INTERNAL_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
   supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
   turnstileSiteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "",
   googleAuthEnabled: process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED === "true",

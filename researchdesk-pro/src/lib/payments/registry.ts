@@ -1,6 +1,7 @@
 import { moyasarAdapter } from "@/lib/payments/adapters/moyasar";
 import { sandboxAdapter } from "@/lib/payments/adapters/sandbox";
 import type { PaymentAdapter, PaymentMethod } from "@/lib/payments/types";
+import { isProductionStage } from "@/lib/stage";
 
 const adapters: PaymentAdapter[] = [sandboxAdapter, moyasarAdapter];
 
@@ -10,7 +11,7 @@ export function adapterById(id: string): PaymentAdapter | undefined {
 
 // Unverified adapters stay hidden in production even when their keys are set.
 export function availableAdapters(): PaymentAdapter[] {
-  const production = process.env.NODE_ENV === "production";
+  const production = isProductionStage();
   return adapters.filter((a) => a.isConfigured() && (a.verified || !production));
 }
 

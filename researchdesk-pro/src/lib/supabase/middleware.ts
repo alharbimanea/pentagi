@@ -1,10 +1,11 @@
 import { createServerClient } from "@supabase/ssr";
 import type { NextRequest, NextResponse } from "next/server";
-import { publicEnv } from "@/lib/env";
+import { authCookieName, publicEnv } from "@/lib/env";
 
 export async function refreshSession(request: NextRequest, response: NextResponse) {
   if (!publicEnv.supabaseUrl || !publicEnv.supabaseAnonKey) return response;
-  const supabase = createServerClient(publicEnv.supabaseUrl, publicEnv.supabaseAnonKey, {
+  const supabase = createServerClient(publicEnv.supabaseServerUrl, publicEnv.supabaseAnonKey, {
+    cookieOptions: { name: authCookieName() },
     cookies: {
       getAll: () => request.cookies.getAll(),
       setAll: (items) => {
