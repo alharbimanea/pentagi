@@ -32,7 +32,7 @@ systemctl enable --now docker
 curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
 apt-get install -y nodejs
 
-curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/gpg.key | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/gpg.key | gpg --batch --yes --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
 curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt > /etc/apt/sources.list.d/caddy-stable.list
 apt-get update && apt-get install -y caddy
 
@@ -120,7 +120,8 @@ printf '[Service]\nEnvironment=SITE_ADDRESS=:80\n' > /etc/systemd/system/caddy.s
 
 systemctl daemon-reload
 systemctl enable researchdesk-supabase researchdesk-web
-systemctl start researchdesk-supabase researchdesk-web
+systemctl start researchdesk-supabase
+systemctl restart researchdesk-web
 systemctl restart caddy
 
 for i in $(seq 1 60); do
